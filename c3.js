@@ -4355,7 +4355,7 @@
 
     c3_chart_internal_fn.getMaxTickWidth = function (id, withoutRecompute) {
         var $$ = this, config = $$.config,
-            maxWidth = 0, targetsToShow, scale, axis, body, svg;
+            maxWidth = 0, targetsToShow, scale, axis;
         if (withoutRecompute && $$.currentMaxTickWidths[id]) {
             return $$.currentMaxTickWidths[id];
         }
@@ -4372,8 +4372,13 @@
                 axis = $$.getXAxis(scale, $$.xOrient, $$.xAxisTickFormat, $$.xAxisTickValues);
                 $$.updateXAxisTickValues(targetsToShow, axis);
             }
+
+            // TODO: getBoundingClientRect is heavy processing. Temporarily Fix
+            maxWidth = 35;
+    /*
             body = this.d3.select('body').classed('c3', true);
             svg = body.append('svg').style('visibility', 'hidden');
+            svg.append('g').call(axis);
             svg.append('g').call(axis).each(function () {
                 $$.d3.select(this).selectAll('text tspan').each(function () {
                     var box = this.getBoundingClientRect();
@@ -4384,7 +4389,9 @@
             window.setTimeout(function () {
                 svg.remove();
             }, 100);
+
             body.classed('c3', false);
+    */
         }
         $$.currentMaxTickWidths[id] = maxWidth <= 0 ? $$.currentMaxTickWidths[id] : maxWidth;
         return $$.currentMaxTickWidths[id];
